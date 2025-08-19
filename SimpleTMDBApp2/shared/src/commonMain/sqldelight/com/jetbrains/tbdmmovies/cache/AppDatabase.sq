@@ -1,0 +1,104 @@
+
+
+CREATE TABLE Movie (
+        id INTEGER NOT NULL,
+        backdropPath TEXT,
+        posterPath TEXT,
+        popularity REAL,
+        title TEXT NOT NULL,
+        orgTitle TEXT NOT NULL,
+        overview TEXT,
+        releaseDate TEXT,
+        voteAverage REAL
+);
+
+removeAllMovies:
+DELETE FROM Movie;
+
+insertMovie:
+INSERT INTO Movie(id, backdropPath, posterPath, popularity, title, orgTitle, overview, releaseDate, voteAverage)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+selectAllMovies:
+SELECT Movie.*
+FROM Movie;
+
+CREATE TABLE MovieDetailEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    backdropPath TEXT,
+    budget INTEGER,
+    collectionId INTEGER NOT NULL REFERENCES CollectionEntity(id),
+    homepage TEXT,
+    originCountry TEXT, -- Stored as JSON string
+    originLanguage TEXT,
+    originTitle TEXT,
+    overview TEXT,
+    posterPath TEXT,
+    popularity REAL,
+    releaseDate TEXT,
+    revenue INTEGER,
+    runtime INTEGER,
+    status TEXT,
+    title TEXT,
+    tagline TEXT,
+    voteAverage REAL,
+    voteCount REAL
+);
+
+CREATE TABLE CollectionEntity (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT,
+    posterPath TEXT,
+    backdropPath TEXT
+);
+
+CREATE TABLE GenreEntity (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+-- Junction table for MovieDetailEntity and GenreEntity (many-to-many)
+CREATE TABLE MovieDetailGenreEntity (
+    movieDetailId INTEGER NOT NULL,
+    genreId INTEGER NOT NULL,
+    PRIMARY KEY (movieDetailId, genreId),
+    FOREIGN KEY(movieDetailId) REFERENCES MovieDetailEntity(id),
+    FOREIGN KEY(genreId) REFERENCES GenreEntity(id)
+);
+
+
+insertCollection:
+INSERT OR REPLACE INTO CollectionEntity(id, name, posterPath, backdropPath)
+VALUES (?, ?, ? , ?);
+
+lastInsertedRowId:
+SELECT last_insert_rowid();
+
+insertMovieDetai:
+INSERT OR REPLACE INTO MovieDetailEntity(id, backdropPath, budget, collectionId,
+ homepage, originCountry, originLanguage,
+ originTitle, overview, posterPath, popularity
+, releaseDate, revenue, runtime, status, title, tagline, voteAverage, voteCount)
+VALUES (?,? , ? ,? ,? ,? ,?, ?, ?, ?, ?,? ,?,?,?,?,?,?,?);
+
+selectAllMoviesDetail:
+SELECT
+    MovieDetailEntity.*, -- Select all columns from the Book table
+    CollectionEntity.id AS collectionId -- Select the author's name and alias it
+FROM MovieDetailEntity
+JOIN CollectionEntity ON MovieDetailEntity.collectionId = CollectionEntity.id;
+
+selectCollectionById:
+SELECT
+    CollectionEntity.*
+    FROM CollectionEntity
+    WHERE CollectionEntity.id = ?;
+
+
+selectMoviesDetailById:
+SELECT
+    MovieDetailEntity.*, -- Select all columns from the Book table
+    CollectionEntity.id AS collectionId -- Select the author's name and alias it
+FROM MovieDetailEntity
+JOIN CollectionEntity ON MovieDetailEntity.collectionId = CollectionEntity.id
+WHERE MovieDetailEntity.id = ?;

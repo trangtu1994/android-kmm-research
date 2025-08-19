@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="padding_5">5dp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
+
+    <dimen name="padding_edge_content">@dimen/padding_8</dimen>
+    <dimen name="padding_gap_horizontal">@dimen/padding_5</dimen>
+
+
+</resources>
