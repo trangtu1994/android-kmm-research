@@ -21,6 +21,9 @@ Config for testing
 Note
 - App is used for demonstrate how KMM work for both android & IOS
 - This implementation does not have unittest
+
+The Screenshot after testing in Android + IOS, log also:
+https://drive.google.com/drive/folders/1ofnPqSUJAsD_qGs2Uf5YRzkNK0l5wqKI?usp=sharing
   
 Reference:
 - https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-ktor-sqldelight.html
